@@ -1,0 +1,27 @@
+clear all
+
+% Load image and add noise
+I = imread('./testImage1.jpg');
+I = rgb2gray(I);
+
+% Go over several noise variances and calculate for each one of them the denoised image
+%noiseVariances = [0.001 0.005 0.009 0.01 0.05 0.09 0.1 0.5 1];
+noiseVariances = [0.001 0.005];
+
+for noiseVarinace=noiseVariances
+    J = imnoise(I,'gaussian',0,noiseVarinace);
+
+    % Run Non Local Means for denoising
+    neighbrhood = 7;
+    denoisedImageMeanPatches = NonLocalMeans(J,3,1,1,3*neighbrhood,1);
+    denoisedImageLowHighPatches = NonLocalMeans(J,3,1,1,3*neighbrhood,2);
+
+    % Calculate mean sqare error
+    [row,col] = size(I);
+    MSENoise( = sum(sum((I - J).^2))/(row*col);
+    MSEMean = sum(sum((I - uint8(denoisedImage)).^2))/(row*col);
+    MSELowHigh = sum(sum((I - uint8(denoisedImageLowHighPatches)).^2))/(row*col);
+end
+
+
+
